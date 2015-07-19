@@ -15,6 +15,10 @@ Table of Contents
     * [get_primary_peers](#get_primary_peers)
     * [get_backup_peers](#get_backup_peers)
     * [set_peer_down](#set_peer_down)
+    * [add_server](#add_server)
+    * [add_peer](#add_peer)
+    * [remove_server](#remove_server)
+    * [remove_peer](#remove_peer)
 * [TODO](#todo)
 * [Compatibility](#compatibility)
 * [Installation](#installation)
@@ -204,6 +208,60 @@ will turn down the backup peer corresponding to `server 127.0.0.4 ...`.
 You can turn on a peer again by providing a `false` value as the 4th argument.
 
 [Back to TOC](#table-of-contents)
+
+add_server
+-----------
+`syntax: ok,err = upstream.add_server(upstream_name,ip:port,weight,max_fails,fail_timeout)`
+
+ Add a server to upstream. if the server is exist will return err and notes the server is exist.     
+ Warning:         
+ `it also to add server to ngx_http_upstream_server_t structure ,so you should call add_peer.   
+[Back to TOC](#table-of-contents)
+
+add_peer
+-----------
+`syntax: ok,err = upstream.add_peer(upstream,ip:port)`
+
+ Add a server to back-end peers. if back-end peers is exist will return err and notes the peer is exist. 
+ it's suitable for ip_hash or round_robin and consistent_hash.    
+ Warning:      
+ `if you are using a consistent_hash and you should change nginx directory auto/modules to below`     
+
+ ```nginx
+ Modified macro variable 'NGX_HTTP_UPSTREAM_CONSISTENT_HASH' 1 ,it's default 0 at 'lua-upstream-nginx-module/src/ngx_http_lua_upstream_module.h' file.
+ ```
+
+[Back to TOC](#table-of-contents)       
+
+remove_server
+-----------
+`syntax: ok,err = upstream.remove_server(upstream,ip:port)`
+
+ Remove a server from upstream. if the server is not exist will return err and notes the server is not found.     
+ Warning:         
+ `it also to add server to ngx_http_upstream_server_t structure ,so you should call add_peer.   
+
+
+[Back to TOC](#table-of-contents)       
+
+remove_peer
+-----------
+`syntax: ok,err = upstream.remove_peer(upstream,ip:port)`
+
+ Remove a server to back-end peers. if back-end peers not exist will return err and notes the peer is not found. 
+ it's suitable for ip_hash or round_robin and consistent_hash.    
+ Warning:      
+ `if you are using a consistent_hash and you should change nginx directory auto/modules to below`     
+
+ ```nginx
+ Modified macro variable 'NGX_HTTP_UPSTREAM_CONSISTENT_HASH' 1 ,it's default 0 at 'lua-upstream-nginx-module/src/ngx_http_lua_upstream_module.h' file.
+ ```
+
+
+[Back to TOC](#table-of-contents)       
+
+
+
 
 TODO
 ====
